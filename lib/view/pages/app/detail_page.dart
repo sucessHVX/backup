@@ -77,28 +77,6 @@ class _DetailPageState extends State<DetailPage> {
                 children: [
                   const Expanded(
                     flex: 2,
-                    child: Text('ISBN'),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 8,
-                    child: TextField(
-                      controller: _isbnController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'ISBN을 입력해주세요',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 2,
                     child: Text('카테고리'),
                   ),
                   const SizedBox(width: 8),
@@ -116,11 +94,11 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Expanded(
-                flex: 1,
+                flex: 0,
                 child: CustomElevatedButton(
                     text: "검색", funPageRoute: () async {})),
             Expanded(
-              flex: 7,
+              flex: 8,
               child: SingleChildScrollView(
                 child: Container(
                   color: Colors.white10,
