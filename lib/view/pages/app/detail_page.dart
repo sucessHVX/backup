@@ -13,7 +13,6 @@ class _DetailPageState extends State<DetailPage> {
   String _selectedCategory = '제목'; // 초기값으로 제목 선택
   final TextEditingController _searchController =
       TextEditingController(text: printQuery);
-  final TextEditingController _isbnController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
 
   @override
@@ -27,78 +26,71 @@ class _DetailPageState extends State<DetailPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedCategory,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedCategory = value!;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem(
-                          value: '제목',
-                          child: Text('제목'),
-                        ),
-                        DropdownMenuItem(
-                          value: '저자',
-                          child: Text('저자'),
-                        ),
-                        DropdownMenuItem(
-                          value: '출판사',
-                          child: Text('출판사'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 8,
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+            Row(
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value!;
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        value: '제목',
+                        child: Text('제목'),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 2,
-                    child: Text('카테고리'),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 8,
-                    child: TextField(
-                      controller: _categoryController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '카테고리를 입력해주세요',
+                      DropdownMenuItem(
+                        value: '저자',
+                        child: Text('저자'),
                       ),
+                      DropdownMenuItem(
+                        value: '출판사',
+                        child: Text('출판사'),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  flex: 8,
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Flexible(
+                  flex: 2,
+                  child: Text('카테고리'),
+                ),
+                const SizedBox(width: 31),
+                Flexible(
+                  flex: 11,
+                  child: TextField(
+                    controller: _categoryController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '카테고리를 입력해주세요',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            CustomElevatedButton(text: "검색", funPageRoute: () async {}),
+            const SizedBox(height: 10),
             Expanded(
-                flex: 0,
-                child: CustomElevatedButton(
-                    text: "검색", funPageRoute: () async {})),
-            Expanded(
-              flex: 8,
               child: SingleChildScrollView(
                 child: Container(
                   color: Colors.white10,
