@@ -2,4 +2,5 @@
 //sharedpreference란 곳에 저장하면 토큰 유효시간 동안 앱이 꺼져도 로그인 유지
 
 String? jwtToken;
-String? printQuery;
+String? searchQuery;
+String? searchCategory;

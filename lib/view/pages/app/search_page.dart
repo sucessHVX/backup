@@ -70,7 +70,7 @@ class _SearchPageState extends State<SearchPage> {
                   _saveSearchHistory();
                 });
               }
-              printQuery = query;
+              searchQuery = query;
               Get.to(() => const DetailPage());
             },
           ),
@@ -95,13 +95,7 @@ class _SearchPageState extends State<SearchPage> {
                     leading: const Icon(Icons.history),
                     title: Text(query),
                     onTap: () {
-                      // _searchController.text = query;
-                      // setState(() {
-                      //   _searchHistory.removeAt(index);
-                      //   _searchHistory.insert(0, query);
-                      //   _saveSearchHistory();
-                      // });
-                      printQuery = query;
+                      searchQuery = query;
                       Get.to(() => const DetailPage());
                     },
                     trailing: IconButton(

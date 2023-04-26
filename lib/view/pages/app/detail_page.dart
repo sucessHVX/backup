@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:wihaoh/controller/book_controller.dart';
+import 'package:wihaoh/domain/book/book_repository.dart';
 import 'package:wihaoh/util/jwt.dart';
 import 'package:wihaoh/view/components/custom_elevated_button.dart';
 
@@ -10,9 +13,10 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final BookController b = Get.put(BookController());
   String _selectedCategory = '제목'; // 초기값으로 제목 선택
   final TextEditingController _searchController =
-      TextEditingController(text: printQuery);
+      TextEditingController(text: searchQuery);
   final TextEditingController _categoryController = TextEditingController();
 
   @override
@@ -88,7 +92,34 @@ class _DetailPageState extends State<DetailPage> {
               ],
             ),
             const SizedBox(height: 10),
-            CustomElevatedButton(text: "검색", funPageRoute: () async {}),
+            CustomElevatedButton(
+                text: "검색",
+                funPageRoute: () async {
+                  BookRepository b = BookRepository();
+                  b.title("ㄱㄱ");
+                  // searchQuery = _searchController.text;
+                  // searchCategory = _categoryController.text;
+                  // int result = 0;
+                  // if (_selectedCategory == "제목" &&
+                  //     _categoryController.text == "") {
+                  //   print("제목");
+                  //   // result = await b.title();
+                  // } else if (_selectedCategory == "저자" &&
+                  //     _categoryController.text == "") {
+                  //   print("저자");
+                  // } else if (_selectedCategory == "출판사" &&
+                  //     _categoryController.text == "") {
+                  //   print("출판사");
+                  // } else if (_searchController.text == "") {
+                  //   print("카테고리");
+                  // } else if (_selectedCategory == "제목") {
+                  //   print("제목, 카테고리");
+                  // } else if (_selectedCategory == "저자") {
+                  //   print("저자, 카테고리");
+                  // } else if (_selectedCategory == "출판사") {
+                  //   print("출판사, 카테고리");
+                  // }
+                }),
             const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
