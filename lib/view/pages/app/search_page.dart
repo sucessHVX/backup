@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wihaoh/util/jwt.dart';
 import 'package:wihaoh/view/pages/app/detail_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -43,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
         title: TextField(
           controller: _searchController,
           decoration: const InputDecoration(
-            hintText: '검색어를 입력하세요',
+            hintText: '제목으로 검색하세요',
           ),
           onSubmitted: (query) {
             final trimmedQuery = query.trim();
@@ -69,6 +70,7 @@ class _SearchPageState extends State<SearchPage> {
                   _saveSearchHistory();
                 });
               }
+              printQuery = query;
               Get.to(() => const DetailPage());
             },
           ),
@@ -99,6 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                       //   _searchHistory.insert(0, query);
                       //   _saveSearchHistory();
                       // });
+                      printQuery = query;
                       Get.to(() => const DetailPage());
                     },
                     trailing: IconButton(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wihaoh/util/jwt.dart';
+import 'package:wihaoh/view/components/custom_elevated_button.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key});
@@ -9,18 +11,26 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   String _selectedCategory = '제목'; // 초기값으로 제목 선택
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController =
+      TextEditingController(text: printQuery);
+  final TextEditingController _isbnController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: 1,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Row(
                 children: [
                   Expanded(
@@ -53,9 +63,8 @@ class _DetailPageState extends State<DetailPage> {
                     flex: 8,
                     child: TextField(
                       controller: _searchController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: '$_selectedCategory을(를) 입력해주세요',
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -63,11 +72,61 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Expanded(
-              flex: 8,
-              child: Container(
-                color: Colors.grey[200],
-                child: const Center(
-                  child: Text('검색 결과가 없습니다.'),
+              flex: 1,
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Text('ISBN'),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 8,
+                    child: TextField(
+                      controller: _isbnController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'ISBN을 입력해주세요',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Text('카테고리'),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 8,
+                    child: TextField(
+                      controller: _categoryController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: '카테고리를 입력해주세요',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                flex: 1,
+                child: CustomElevatedButton(
+                    text: "검색", funPageRoute: () async {})),
+            Expanded(
+              flex: 7,
+              child: SingleChildScrollView(
+                child: Container(
+                  color: Colors.white10,
+                  child: const Center(
+                    child: Text('검색 결과가 없습니다.'),
+                  ),
                 ),
               ),
             ),
