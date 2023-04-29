@@ -65,7 +65,8 @@ class JoinPage extends StatelessWidget {
             text: "회원가입",
             funPageRoute: () async {
               if (_formkey.currentState!.validate()) {
-                int result = await u.join(_id.text, _pw.text, _name.text);
+                int result =
+                    await u.joinController(_id.text, _pw.text, _name.text);
                 loginClear();
                 if (result == 1) {
                   Get.off(() => LoginPage());

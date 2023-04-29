@@ -5,7 +5,7 @@ import 'package:wihaoh/util/clear.dart';
 import 'package:wihaoh/view/components/custom_elevated_button.dart';
 import 'package:wihaoh/view/components/custom_text_form_field.dart';
 import 'package:wihaoh/util/validator_util.dart';
-import 'package:wihaoh/view/pages/app/book_page.dart';
+import 'package:wihaoh/view/pages/app/home_page.dart';
 import 'package:wihaoh/view/pages/user/join_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,12 +80,12 @@ class LoginPage extends StatelessWidget {
             funPageRoute: () async {
               if (_formkey.currentState!.validate()) {
                 //trim() 공백제거 해줌
-                int result =
-                    await u.login(_username.text.trim(), _password.text.trim());
+                int result = await u.loginController(
+                    _username.text.trim(), _password.text.trim());
                 if (result == 1) {
                   loginClear();
                   _saveCredentials();
-                  Get.off(() => BookPage());
+                  Get.off(() => HomePage());
                 } else {
                   Get.snackbar("로그인 실패", "ID, PW 확인하세요");
                 }

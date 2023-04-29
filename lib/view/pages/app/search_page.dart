@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wihaoh/controller/book_controller.dart';
 import 'package:wihaoh/util/jwt.dart';
 import 'package:wihaoh/view/pages/app/detail_page.dart';
 
@@ -12,6 +13,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final BookController b = Get.find();
   final TextEditingController _searchController = TextEditingController();
   final List<String> _searchHistory = [];
 
@@ -46,13 +48,15 @@ class _SearchPageState extends State<SearchPage> {
           decoration: const InputDecoration(
             hintText: '제목으로 검색하세요',
           ),
-          onSubmitted: (query) {
+          onSubmitted: (query) async {
             final trimmedQuery = query.trim();
             if (trimmedQuery.isNotEmpty) {
               setState(() {
                 _searchHistory.insert(0, trimmedQuery);
                 _saveSearchHistory();
               });
+              searchQuery = query;
+              await b.title(_searchController.text);
               Get.to(() => const DetailPage());
             }
           },
@@ -61,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
           IconButton(
             icon: const Icon(Icons.search),
             iconSize: 35,
-            onPressed: () {
+            onPressed: () async {
               // 검색 버튼을 누를 때 동작하는 함수
               final query = _searchController.text.trim();
               if (query.isNotEmpty) {
@@ -71,6 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                 });
               }
               searchQuery = query;
+              await b.title(_searchController.text);
               Get.to(() => const DetailPage());
             },
           ),
@@ -94,8 +99,9 @@ class _SearchPageState extends State<SearchPage> {
                   return ListTile(
                     leading: const Icon(Icons.history),
                     title: Text(query),
-                    onTap: () {
+                    onTap: () async {
                       searchQuery = query;
+                      await b.title(_searchController.text);
                       Get.to(() => const DetailPage());
                     },
                     trailing: IconButton(

@@ -11,10 +11,10 @@ class UserRepository {
   // _ 언더바를 변수 앞에 쓰면 private됨
   final UserProvider _userProvider = UserProvider();
 
-  Future<User> login(String username, String password) async {
+  Future<User> loginRepository(String username, String password) async {
     LoginReqDto loginReqDto = LoginReqDto(username, password);
     //.toJson을 통해 map으로 변경
-    Response response = await _userProvider.login(loginReqDto.toJson());
+    Response response = await _userProvider.loginProvider(loginReqDto.toJson());
     dynamic body = response.body;
     UserRespDto userRespDto = UserRespDto.fromJson(body);
 
@@ -30,10 +30,11 @@ class UserRepository {
     }
   }
 
-  Future<int> join(String username, String password, String name) async {
+  Future<int> joinRepository(
+      String username, String password, String name) async {
     JoinReqDto joinReqDto = JoinReqDto(username, password, name);
     //.toJson을 통해 map으로 변경
-    Response response = await _userProvider.join(joinReqDto.toJson());
+    Response response = await _userProvider.joinProvider(joinReqDto.toJson());
     if (response.isOk == true) {
       return 1;
     } else {

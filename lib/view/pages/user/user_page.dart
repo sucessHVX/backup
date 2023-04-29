@@ -9,7 +9,9 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     UserController u = Get.put(UserController());
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("회원 정보"),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

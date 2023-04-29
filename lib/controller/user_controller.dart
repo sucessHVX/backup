@@ -16,8 +16,8 @@ class UserController extends GetxController {
     loginClear();
   }
 
-  Future<int> login(String username, String password) async {
-    User principal = await _userRepository.login(username, password);
+  Future<int> loginController(String username, String password) async {
+    User principal = await _userRepository.loginRepository(username, password);
 
     if (principal.username != null) {
       isLogin.value = true;
@@ -28,9 +28,9 @@ class UserController extends GetxController {
     }
   }
 
-  Future<int> join(String username, String password, String name) async {
-    int result = await _userRepository.join(username, password, name);
-
+  Future<int> joinController(
+      String username, String password, String name) async {
+    int result = await _userRepository.joinRepository(username, password, name);
     if (result == 1) {
       return 1;
     } else {

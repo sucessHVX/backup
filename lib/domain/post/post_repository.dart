@@ -24,11 +24,16 @@ class PostRepository {
     }
   }
 
-  Future<Post> updateById(int id, String title, String content) async {
-    SaveOrUpdateReqDto UpdateReqDto = SaveOrUpdateReqDto(title, content);
-    //.toJson을 통해 map으로 변경
-    Response response =
-        await _postProvider.updateById(id, UpdateReqDto.toJson());
+  Future<int> deleteById(int id) async {
+    Response response = await _postProvider.deleteById(id);
+    dynamic body = response.body;
+    CMRespDto cmRespDto = CMRespDto.fromJson(body);
+
+    return cmRespDto.code!; //!로 널처리
+  }
+
+  Future<Post> findById(int id) async {
+    Response response = await _postProvider.findById(id);
     dynamic body = response.body;
     CMRespDto cmRespDto = CMRespDto.fromJson(body);
 
@@ -40,16 +45,11 @@ class PostRepository {
     }
   }
 
-  Future<int> deleteById(int id) async {
-    Response response = await _postProvider.deleteById(id);
-    dynamic body = response.body;
-    CMRespDto cmRespDto = CMRespDto.fromJson(body);
-
-    return cmRespDto.code!; //!로 널처리
-  }
-
-  Future<Post> findById(int id) async {
-    Response response = await _postProvider.findById(id);
+  Future<Post> updateById(int id, String title, String content) async {
+    SaveOrUpdateReqDto UpdateReqDto = SaveOrUpdateReqDto(title, content);
+    //.toJson을 통해 map으로 변경
+    Response response =
+        await _postProvider.updateById(id, UpdateReqDto.toJson());
     dynamic body = response.body;
     CMRespDto cmRespDto = CMRespDto.fromJson(body);
 

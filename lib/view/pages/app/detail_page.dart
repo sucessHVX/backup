@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wihaoh/controller/book_controller.dart';
-import 'package:wihaoh/domain/book/book_repository.dart';
 import 'package:wihaoh/util/jwt.dart';
 import 'package:wihaoh/view/components/custom_elevated_button.dart';
 
@@ -13,7 +12,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final BookController b = Get.put(BookController());
+  final BookController b = Get.find();
   String _selectedCategory = '제목'; // 초기값으로 제목 선택
   final TextEditingController _searchController =
       TextEditingController(text: searchQuery);
@@ -35,7 +34,7 @@ class _DetailPageState extends State<DetailPage> {
             Row(
               children: [
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   child: DropdownButtonFormField<String>(
                     value: _selectedCategory,
                     onChanged: (value) {
@@ -76,11 +75,14 @@ class _DetailPageState extends State<DetailPage> {
               children: [
                 const Flexible(
                   flex: 2,
-                  child: Text('카테고리'),
+                  child: Text(
+                    '카테고리',
+                    style: TextStyle(fontSize: 17),
+                  ),
                 ),
-                const SizedBox(width: 31),
+                const SizedBox(width: 46),
                 Flexible(
-                  flex: 11,
+                  flex: 8,
                   child: TextField(
                     controller: _categoryController,
                     decoration: const InputDecoration(
@@ -95,38 +97,88 @@ class _DetailPageState extends State<DetailPage> {
             CustomElevatedButton(
                 text: "검색",
                 funPageRoute: () async {
-                  BookRepository b = BookRepository();
-                  b.title("ㄱㄱ");
-                  // searchQuery = _searchController.text;
-                  // searchCategory = _categoryController.text;
-                  // int result = 0;
-                  // if (_selectedCategory == "제목" &&
-                  //     _categoryController.text == "") {
-                  //   print("제목");
-                  //   // result = await b.title();
-                  // } else if (_selectedCategory == "저자" &&
-                  //     _categoryController.text == "") {
-                  //   print("저자");
-                  // } else if (_selectedCategory == "출판사" &&
-                  //     _categoryController.text == "") {
-                  //   print("출판사");
-                  // } else if (_searchController.text == "") {
-                  //   print("카테고리");
-                  // } else if (_selectedCategory == "제목") {
-                  //   print("제목, 카테고리");
-                  // } else if (_selectedCategory == "저자") {
-                  //   print("저자, 카테고리");
-                  // } else if (_selectedCategory == "출판사") {
-                  //   print("출판사, 카테고리");
-                  // }
+                  searchQuery = _searchController.text;
+                  searchCategory = _categoryController.text;
+                  int result = 0;
+                  if (_searchController.text == "" &&
+                      _categoryController.text == "") {
+                    print("검색 결과가 없습니다");
+                  } else {
+                    if (_selectedCategory == "제목" &&
+                        _categoryController.text == "") {
+                      await b.title(_searchController.text);
+                      print('제목 : ${b.books[0].title}');
+                      print('저자 : ${b.books[0].author}');
+                      print('출판사 : ${b.books[0].publisher}');
+                      print('카테코리 : ${b.books[0].category}');
+                      print('발행연도 : ${b.books[0].issueYear}');
+                      print('ISBN : ${b.books[0].isbn}');
+                    }
+
+                    //   } else if (_selectedCategory == "저자" &&
+                    //       _categoryController.text == "") {
+                    //     result = await b.author(_searchController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   } else if (_selectedCategory == "출판사" &&
+                    //       _categoryController.text == "") {
+                    //     result = await b.publisher(_searchController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   } else if (_searchController.text == "") {
+                    //     result = await b.category(_categoryController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   } else if (_selectedCategory == "제목") {
+                    //     result = await b.titleCategory(
+                    //         _searchController.text, _categoryController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   } else if (_selectedCategory == "저자") {
+                    //     result = await b.authorCategory(
+                    //         _searchController.text, _categoryController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   } else if (_selectedCategory == "출판사") {
+                    //     result = await b.publisherCategory(
+                    //         _searchController.text, _categoryController.text);
+                    //     if (result == 1) {
+                    //       print("성공");
+                    //     } else {
+                    //       print("실패");
+                    //     }
+                    //   }
+                  }
                 }),
             const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
                   color: Colors.white10,
-                  child: const Center(
-                    child: Text('검색 결과가 없습니다.'),
+                  child: Column(
+                    children: [
+                      Text('제목 : ${b.books[0].title}'),
+                      Text('저자 : ${b.books[0].author}'),
+                      Text('출판사 : ${b.books[0].publisher}'),
+                      Text('발행연도 : ${b.books[0].issueYear}'),
+                      Text('카테코리 : ${b.books[0].category}'),
+                      Text('ISBN : ${b.books[0].isbn}'),
+                    ],
                   ),
                 ),
               ),
