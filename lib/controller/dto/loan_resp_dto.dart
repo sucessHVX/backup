@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
+import 'package:wihaoh/domain/book/book.dart';
 
 class LoanRespDto {
   final DateTime? borrowDate;
   final DateTime? returnDate;
-  final dynamic book;
+  final Book? book;
 
   LoanRespDto({
     this.borrowDate,
@@ -13,7 +14,9 @@ class LoanRespDto {
 
   //통신을 위해서 json 처럼 생긴 문자열 {"id": 1} => 다트 오브젝트로
   LoanRespDto.fromJson(Map<String, dynamic> json)
-      : borrowDate = DateFormat("yyyy-mm-dd").parse(json["borrowDate"]),
-        returnDate = DateFormat("yyyy-mm-dd").parse(json["returnDate"]),
-        book = json["bookResponseDto"];
+      : borrowDate =
+            DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json["borrowDate"]),
+        returnDate =
+            DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json["returnDate"]),
+        book = Book.fromJson(json["bookResponseDto"]);
 }

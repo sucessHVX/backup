@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:wihaoh/domain/book/book.dart';
 import 'package:wihaoh/domain/book/book_provider.dart';
@@ -6,15 +7,6 @@ import 'package:wihaoh/domain/book/book_provider.dart';
 class BookRepository {
   // _ 언더바를 변수 앞에 쓰면 private됨
   final BookProvider _bookProvider = BookProvider();
-
-  Future<int> loan(String isbn) async {
-    Response response = await _bookProvider.loan(isbn);
-    if (response.isOk == true) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
 
   Future<List<Book>> findAll() async {
     Response response = await _bookProvider.findAll();
@@ -27,77 +19,81 @@ class BookRepository {
   Future<List<Book>> title(String title) async {
     Response response = await _bookProvider.titleSearch(title);
     dynamic body = response.body;
-    List<dynamic> temp = body;
-    List<Book> book = temp.map((book) => Book.fromJson(book)).toList();
-    return book;
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> author(String author) async {
+  Future<List<Book>> author(String author) async {
     Response response = await _bookProvider.authorSearch(author);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
-      return book;
-    } else {
-      return Book();
-    }
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> publisher(String publisher) async {
+  Future<List<Book>> publisher(String publisher) async {
     Response response = await _bookProvider.publisherSearch(publisher);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
-      return book;
-    } else {
-      return Book();
-    }
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> category(String category) async {
+  Future<List<Book>> category(String category) async {
     Response response = await _bookProvider.categorySearch(category);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
-      return book;
-    } else {
-      return Book();
-    }
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> titleCategory(String title, String category) async {
+  Future<List<Book>> titleCategory(String title, String category) async {
     Response response =
         await _bookProvider.titleCategorySearch(title, category);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
-      return book;
-    } else {
-      return Book();
-    }
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> authorCategory(String author, String category) async {
+  Future<List<Book>> authorCategory(String author, String category) async {
     Response response =
         await _bookProvider.authorCategorySearch(author, category);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
-      return book;
-    } else {
-      return Book();
-    }
+    print(body);
+    return checkEmpty(body);
   }
 
-  Future<Book> publisherCategory(String publisher, String category) async {
+  Future<List<Book>> publisherCategory(
+      String publisher, String category) async {
     Response response =
         await _bookProvider.publisherCategorySearch(publisher, category);
     dynamic body = response.body;
-    Book book = Book.fromJson(body);
-    if (book.title != null) {
+    print(body);
+    return checkEmpty(body);
+  }
+
+  Future<int> loan(String isbn, String what) async {
+    if (what == "대출") {
+      Response response = await _bookProvider.loan(isbn);
+      if (response.isOk == true) {
+        return 1;
+      } else {
+        return -1;
+      }
+    } else {
+      Response response = await _bookProvider.loanReturn(isbn);
+      if (response.isOk == true) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
+  }
+
+  List<Book> checkEmpty(body) {
+    if (body.isNotEmpty) {
+      List<dynamic> temp = body;
+      List<Book> book = temp.map((book) => Book.fromJson(book)).toList();
       return book;
     } else {
-      return Book();
+      return <Book>[];
     }
   }
 }

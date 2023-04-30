@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wihaoh/controller/dto/info_resp_dto.dart';
 import 'package:wihaoh/domain/user/user.dart';
 import 'package:wihaoh/domain/user/user_repository.dart';
 import 'package:wihaoh/util/clear.dart';
@@ -8,6 +9,7 @@ class UserController extends GetxController {
   final UserRepository _userRepository = UserRepository();
   final RxBool isLogin = false.obs; //UI가 관찰 가능한 변수 => 변경 => UI가 자동 업데이트
   final principal = User().obs;
+  final princ = InfoRespDto().obs;
   final joins = <User>[].obs;
 
   void logout() {
@@ -26,6 +28,11 @@ class UserController extends GetxController {
     } else {
       return -1;
     }
+  }
+
+  Future<void> userController() async {
+    InfoRespDto princ = await _userRepository.userRepository();
+    this.princ.value = princ;
   }
 
   Future<int> joinController(

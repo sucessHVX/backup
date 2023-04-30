@@ -1,4 +1,5 @@
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:wihaoh/controller/dto/info_resp_dto.dart';
 import 'package:wihaoh/controller/dto/join_req_dto.dart';
 import 'package:wihaoh/controller/dto/login_req_dto.dart';
 import 'package:wihaoh/controller/dto/user_resp_dto.dart';
@@ -20,14 +21,21 @@ class UserRepository {
 
     if (body["jwt"] != null) {
       User principal = User.fromJson(userRespDto.data);
-      print(principal.loans);
-
       String token = body["jwt"];
       jwtToken = token;
       return principal;
     } else {
       return User();
     }
+  }
+
+  Future<InfoRespDto> userRepository() async {
+    Response response = await _userProvider.userProvider();
+    dynamic body = response.body;
+    print(body);
+    InfoRespDto princ = InfoRespDto.fromJson(body);
+    print(princ);
+    return princ;
   }
 
   Future<int> joinRepository(

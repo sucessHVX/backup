@@ -16,10 +16,12 @@ class UserPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("회원 이름 : ${u.principal.value.name}"),
-            Text("회원 아이디 : ${u.principal.value.username}"),
-            Text("대출 : ${u.principal.value.loans}"),
-            // Text("회원 가입 날짜 : ${u.principal.value.created}"),
+            Text("회원 이름 : ${u.princ.value.name}"),
+            Text("회원 아이디 : ${u.princ.value.username}"),
+            const Text("대출목록"),
+            Text("제목 : ${u.princ.value.loan!.book?.title}"),
+            Text("대출일 : ${u.princ.value.loan!.borrowDate}"),
+            Text("반납일 : ${u.princ.value.loan!.returnDate}"),
           ],
         ),
       ),

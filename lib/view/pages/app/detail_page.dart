@@ -106,63 +106,60 @@ class _DetailPageState extends State<DetailPage> {
                   } else {
                     if (_selectedCategory == "제목" &&
                         _categoryController.text == "") {
-                      await b.title(_searchController.text);
-                      print('제목 : ${b.books[0].title}');
-                      print('저자 : ${b.books[0].author}');
-                      print('출판사 : ${b.books[0].publisher}');
-                      print('카테코리 : ${b.books[0].category}');
-                      print('발행연도 : ${b.books[0].issueYear}');
-                      print('ISBN : ${b.books[0].isbn}');
+                      result = await b.title(_searchController.text);
+                      if (result == 1) {
+                        print('제목 : ${b.books[0].title}');
+                      } else {
+                        print("제목");
+                      }
+                    } else if (_selectedCategory == "저자" &&
+                        _categoryController.text == "") {
+                      result = await b.author(_searchController.text);
+                      if (result == 1) {
+                        print('저자 : ${b.books[0].title}');
+                      } else {
+                        print("저자");
+                      }
+                    } else if (_selectedCategory == "출판사" &&
+                        _categoryController.text == "") {
+                      result = await b.publisher(_searchController.text);
+                      if (result == 1) {
+                        print('출판사 : ${b.books[0].title}');
+                      } else {
+                        print("출판사");
+                      }
+                    } else if (_searchController.text == "") {
+                      result = await b.category(_categoryController.text);
+                      if (result == 1) {
+                        print('카테 : ${b.books[0].title}');
+                      } else {
+                        print("카테");
+                      }
+                    } else if (_selectedCategory == "제목") {
+                      result = await b.titleCategory(
+                          _searchController.text, _categoryController.text);
+                      if (result == 1) {
+                        print('제카 : ${b.books[0].title}');
+                      } else {
+                        print("제카");
+                      }
+                    } else if (_selectedCategory == "저자") {
+                      result = await b.authorCategory(
+                          _searchController.text, _categoryController.text);
+                      if (result == 1) {
+                        print('저카 : ${b.books[0].title}');
+                      } else {
+                        print("저카");
+                      }
+                    } else if (_selectedCategory == "출판사") {
+                      result = await b.publisherCategory(
+                          _searchController.text, _categoryController.text);
+                      if (result == 1) {
+                        print('출카 : ${b.books[0].title}');
+                      } else {
+                        print("출카");
+                      }
                     }
-
-                    //   } else if (_selectedCategory == "저자" &&
-                    //       _categoryController.text == "") {
-                    //     result = await b.author(_searchController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   } else if (_selectedCategory == "출판사" &&
-                    //       _categoryController.text == "") {
-                    //     result = await b.publisher(_searchController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   } else if (_searchController.text == "") {
-                    //     result = await b.category(_categoryController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   } else if (_selectedCategory == "제목") {
-                    //     result = await b.titleCategory(
-                    //         _searchController.text, _categoryController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   } else if (_selectedCategory == "저자") {
-                    //     result = await b.authorCategory(
-                    //         _searchController.text, _categoryController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   } else if (_selectedCategory == "출판사") {
-                    //     result = await b.publisherCategory(
-                    //         _searchController.text, _categoryController.text);
-                    //     if (result == 1) {
-                    //       print("성공");
-                    //     } else {
-                    //       print("실패");
-                    //     }
-                    //   }
                   }
                 }),
             const SizedBox(height: 10),

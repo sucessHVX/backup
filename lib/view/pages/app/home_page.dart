@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserController u = Get.find();
     final BookController b = Get.put(BookController());
     return WillPopScope(
       onWillPop: () async {
@@ -82,8 +83,9 @@ class HomePage extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
+                await u.userController();
                 Get.to(() => const UserPage());
               },
               child: const Text(
