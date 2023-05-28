@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wihaoh/controller/book_controller.dart';
 import 'package:wihaoh/util/jwt.dart';
-import 'package:wihaoh/view/pages/app/detail_page.dart';
+import 'package:wihaoh/view/pages/app/search_detail_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
               });
               searchQuery = query;
               await b.title(_searchController.text);
-              Get.to(() => const DetailPage());
+              Get.to(() => const SearchDetailPage());
             }
           },
         ),
@@ -76,7 +76,7 @@ class _SearchPageState extends State<SearchPage> {
               }
               searchQuery = query;
               await b.title(_searchController.text);
-              Get.to(() => const DetailPage());
+              Get.to(() => const SearchDetailPage());
             },
           ),
         ],
@@ -101,8 +101,8 @@ class _SearchPageState extends State<SearchPage> {
                     title: Text(query),
                     onTap: () async {
                       searchQuery = query;
-                      await b.title(_searchController.text);
-                      Get.to(() => const DetailPage());
+                      await b.title(query);
+                      Get.to(() => const SearchDetailPage());
                     },
                     trailing: IconButton(
                       icon: const Icon(Icons.close),

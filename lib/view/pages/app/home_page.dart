@@ -31,7 +31,18 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         drawer: _navigation(context),
         appBar: AppBar(
-          title: const Text("도서관 안내 어플"),
+          title: const Center(
+            child: Text("도서관 안내 어플"),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await u.userController();
+                Get.to(() => const UserPage());
+              },
+              icon: const Icon(Icons.person),
+            ),
+          ],
         ),
         body: Container(
           padding: const EdgeInsets.all(16.0),

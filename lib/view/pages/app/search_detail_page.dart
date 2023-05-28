@@ -3,17 +3,19 @@ import 'package:get/get.dart';
 import 'package:wihaoh/controller/book_controller.dart';
 import 'package:wihaoh/util/jwt.dart';
 import 'package:wihaoh/view/components/custom_elevated_button.dart';
+import 'package:wihaoh/view/pages/app/book_detail_page.dart';
 
-class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+class SearchDetailPage extends StatefulWidget {
+  const SearchDetailPage({super.key});
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  _SearchDetailPageState createState() => _SearchDetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _SearchDetailPageState extends State<SearchDetailPage> {
   final BookController b = Get.find();
   String _selectedCategory = '제목'; // 초기값으로 제목 선택
+  String _selectedCategory2 = '과학기술'; // 초기값으로 제목 선택
   final TextEditingController _searchController =
       TextEditingController(text: searchQuery);
   final TextEditingController _categoryController = TextEditingController();
@@ -73,14 +75,33 @@ class _DetailPageState extends State<DetailPage> {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Flexible(
-                  flex: 2,
-                  child: Text(
-                    '카테고리',
-                    style: TextStyle(fontSize: 17),
+                Flexible(
+                  flex: 3,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedCategory2,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory2 = value!;
+                        _categoryController.text = value;
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        value: '과학기술',
+                        child: Text('과학기술'),
+                      ),
+                      DropdownMenuItem(
+                        value: '문화예술',
+                        child: Text('문화예술'),
+                      ),
+                      DropdownMenuItem(
+                        value: '인문사회',
+                        child: Text('인문사회'),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 46),
+                const SizedBox(width: 10),
                 Flexible(
                   flex: 8,
                   child: TextField(
@@ -97,6 +118,7 @@ class _DetailPageState extends State<DetailPage> {
             CustomElevatedButton(
                 text: "검색",
                 funPageRoute: () async {
+                  setState(() {});
                   searchQuery = _searchController.text;
                   searchCategory = _categoryController.text;
                   int result = 0;
@@ -108,76 +130,113 @@ class _DetailPageState extends State<DetailPage> {
                         _categoryController.text == "") {
                       result = await b.title(_searchController.text);
                       if (result == 1) {
-                        print('제목 : ${b.books[0].title}');
-                      } else {
-                        print("제목");
-                      }
+                      } else {}
                     } else if (_selectedCategory == "저자" &&
                         _categoryController.text == "") {
                       result = await b.author(_searchController.text);
                       if (result == 1) {
-                        print('저자 : ${b.books[0].title}');
-                      } else {
-                        print("저자");
-                      }
+                      } else {}
                     } else if (_selectedCategory == "출판사" &&
                         _categoryController.text == "") {
                       result = await b.publisher(_searchController.text);
                       if (result == 1) {
-                        print('출판사 : ${b.books[0].title}');
-                      } else {
-                        print("출판사");
-                      }
+                      } else {}
                     } else if (_searchController.text == "") {
                       result = await b.category(_categoryController.text);
                       if (result == 1) {
-                        print('카테 : ${b.books[0].title}');
-                      } else {
-                        print("카테");
-                      }
+                      } else {}
                     } else if (_selectedCategory == "제목") {
                       result = await b.titleCategory(
                           _searchController.text, _categoryController.text);
                       if (result == 1) {
-                        print('제카 : ${b.books[0].title}');
-                      } else {
-                        print("제카");
-                      }
+                      } else {}
                     } else if (_selectedCategory == "저자") {
                       result = await b.authorCategory(
                           _searchController.text, _categoryController.text);
                       if (result == 1) {
-                        print('저카 : ${b.books[0].title}');
-                      } else {
-                        print("저카");
-                      }
+                      } else {}
                     } else if (_selectedCategory == "출판사") {
                       result = await b.publisherCategory(
                           _searchController.text, _categoryController.text);
                       if (result == 1) {
-                        print('출카 : ${b.books[0].title}');
-                      } else {
-                        print("출카");
-                      }
+                      } else {}
                     }
                   }
                 }),
             const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.white10,
-                  child: Column(
-                    children: [
-                      Text('제목 : ${b.books[0].title}'),
-                      Text('저자 : ${b.books[0].author}'),
-                      Text('출판사 : ${b.books[0].publisher}'),
-                      Text('발행연도 : ${b.books[0].issueYear}'),
-                      Text('카테코리 : ${b.books[0].category}'),
-                      Text('ISBN : ${b.books[0].isbn}'),
-                    ],
-                  ),
-                ),
+                child: b.books.isEmpty
+                    ? const Center(
+                        child: Text(
+                          '검색 결과가 없습니다.',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount:
+                            b.books.length * 2 - 1, // 구분선을 위해 아이템 수에 구분선 수를 추가
+                        itemBuilder: (context, index) {
+                          // 구분선을 위한 인덱스 체크
+                          if (index.isOdd) {
+                            return const Divider(
+                              thickness: 5, // 구분선의 두께 설정
+                            );
+                          }
+
+                          // 실제 아이템 인덱스 계산
+                          final itemIndex = index ~/ 2;
+
+                          return GestureDetector(
+                            onTap: () async {
+                              await Get.to(() => BookDetailPage(itemIndex));
+                            },
+                            child: Row(
+                              children: [
+                                Hero(
+                                  tag: itemIndex,
+                                  child: Container(
+                                    width: 150,
+                                    height: 200,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 15,
+                                          offset: const Offset(10, 10),
+                                          color: Colors.black.withOpacity(0.3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Image.network(
+                                      b.books[itemIndex].imgUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${b.books[itemIndex].title!} / ${b.books[itemIndex].author!} 지음",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
               ),
             ),
           ],
