@@ -34,7 +34,6 @@ class UserRepository {
     dynamic body = response.body;
     print(body);
     InfoRespDto princ = InfoRespDto.fromJson(body);
-    print(princ);
     return princ;
   }
 
