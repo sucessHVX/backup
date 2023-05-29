@@ -10,99 +10,108 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double imageWidth = screenWidth * 0.55;
+    double imageHeight = screenHeight * 0.38;
+    double buttonWidth = screenWidth * 0.45;
+    double buttonHeight = screenHeight * 0.065;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("도서 목록"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 15),
-              Hero(
-                tag: index!,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.55,
-                  height: MediaQuery.of(context).size.width * 0.8,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 15,
-                        offset: const Offset(10, 10),
-                        color: Colors.black.withOpacity(0.3),
-                      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                Hero(
+                  tag: index!,
+                  child: Container(
+                    width: imageWidth,
+                    height: imageHeight,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 15,
+                          offset: const Offset(10, 10),
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ],
+                    ),
+                    child: Image.network(
+                      b.books[index!].imgUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    dividerThickness: 3,
+                    columns: [
+                      const DataColumn(label: Text('제목')),
+                      DataColumn(label: Text('${b.books[index!].title}')),
+                    ],
+                    rows: [
+                      DataRow(cells: [
+                        const DataCell(Text('저자')),
+                        DataCell(Text('${b.books[index!].author}')),
+                      ]),
+                      DataRow(cells: [
+                        const DataCell(Text('출판사')),
+                        DataCell(Text('${b.books[index!].publisher}')),
+                      ]),
+                      DataRow(cells: [
+                        const DataCell(Text('발행연도')),
+                        DataCell(Text('${b.books[index!].issueYear}')),
+                      ]),
+                      DataRow(cells: [
+                        const DataCell(Text('카테고리')),
+                        DataCell(Text('${b.books[index!].category}')),
+                      ]),
+                      DataRow(cells: [
+                        const DataCell(Text('ISBN')),
+                        DataCell(Text('${b.books[index!].isbn}')),
+                      ]),
                     ],
                   ),
-                  child: Image.network(
-                    b.books[index!].imgUrl,
-                    fit: BoxFit.cover,
-                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  dividerThickness: 3,
-                  columns: [
-                    const DataColumn(label: Text('제목')),
-                    DataColumn(label: Text('${b.books[index!].title}')),
-                  ],
-                  rows: [
-                    DataRow(cells: [
-                      const DataCell(Text('저자')),
-                      DataCell(Text('${b.books[index!].author}')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('출판사')),
-                      DataCell(Text('${b.books[index!].publisher}')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('발행연도')),
-                      DataCell(Text('${b.books[index!].issueYear}')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('카테고리')),
-                      DataCell(Text('${b.books[index!].category}')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('ISBN')),
-                      DataCell(Text('${b.books[index!].isbn}')),
-                    ]),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: buttonWidth,
+                      height: buttonHeight,
+                      child: CustomElevatedButton(
+                        text: "대출",
+                        funPageRoute: () {
+                          loanOrNot(context, "대출", index!);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: buttonWidth,
+                      height: buttonHeight,
+                      child: CustomElevatedButton(
+                        text: "안내",
+                        funPageRoute: () {
+                          reLoad(context, "길안내 중입니다...");
+                        },
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    height: MediaQuery.of(context).size.width * 0.13,
-                    child: CustomElevatedButton(
-                      text: "대출",
-                      funPageRoute: () {
-                        loanOrNot(context, "대출", index!);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    height: MediaQuery.of(context).size.width * 0.13,
-                    child: CustomElevatedButton(
-                      text: "안내",
-                      funPageRoute: () {
-                        reLoad(context, "길안내 중입니다...");
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
