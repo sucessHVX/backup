@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:wihaoh/domain/book/book.dart';
 import 'package:wihaoh/domain/book/book_provider.dart';
 
@@ -19,28 +18,24 @@ class BookRepository {
   Future<List<Book>> title(String title) async {
     Response response = await _bookProvider.titleSearch(title);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
   Future<List<Book>> author(String author) async {
     Response response = await _bookProvider.authorSearch(author);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
   Future<List<Book>> publisher(String publisher) async {
     Response response = await _bookProvider.publisherSearch(publisher);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
   Future<List<Book>> category(String category) async {
     Response response = await _bookProvider.categorySearch(category);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
@@ -48,7 +43,6 @@ class BookRepository {
     Response response =
         await _bookProvider.titleCategorySearch(title, category);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
@@ -56,7 +50,6 @@ class BookRepository {
     Response response =
         await _bookProvider.authorCategorySearch(author, category);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 
@@ -65,7 +58,6 @@ class BookRepository {
     Response response =
         await _bookProvider.publisherCategorySearch(publisher, category);
     dynamic body = response.body;
-    print(body);
     return checkEmpty(body);
   }
 

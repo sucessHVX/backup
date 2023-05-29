@@ -94,28 +94,7 @@ class BookDetailPage extends StatelessWidget {
                     child: CustomElevatedButton(
                       text: "안내",
                       funPageRoute: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    CircularProgressIndicator(),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      '길안내 중입니다...',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        reLoad(context, "길안내 중입니다...");
                       },
                     ),
                   ),
@@ -127,37 +106,88 @@ class BookDetailPage extends StatelessWidget {
       ),
     );
   }
+
+  void loanOrNot(BuildContext context, String name, int index) {
+    final BookController b = Get.find();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(name),
+          content: Text('$name하시겠습니까'),
+          actions: [
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () async {
+                reLoad(context, "바코드를 찍어주세요...");
+                await Future.delayed(const Duration(seconds: 2));
+                int result = await b.loan(b.books[index].isbn!, name);
+                if (result == 1) {
+                  Get.snackbar("$name 성공", "$name이 완료되었습니다");
+                } else {
+                  Get.snackbar("$name 실패", "$name이 불가능합니다");
+                }
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-void loanOrNot(BuildContext context, String name, int index) {
-  final BookController b = Get.find();
+Future<dynamic> reLoad(BuildContext context, String ex) async {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(name),
-        content: Text('$name하시겠습니까'),
-        actions: [
-          TextButton(
-            child: const Text('확인'),
-            onPressed: () async {
-              int result = await b.loan(b.books[index].isbn!, name);
-              if (result == 1) {
-                Get.snackbar("$name 성공", "$name이 완료되었습니다");
-              } else {
-                Get.snackbar("$name 실패", "$name이 불가능합니다");
-              }
-              Navigator.pop(context);
-            },
-          ),
-          TextButton(
-            child: const Text('취소'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const CircularProgressIndicator(
+                strokeWidth: 5,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              ex,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.none,
+                fontSize: 30,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 2,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
     },
   );
+
+  if (ex == "바코드를 찍어주세요...") {
+    await Future.delayed(const Duration(seconds: 2));
+    Navigator.pop(context);
+  }
 }

@@ -64,12 +64,8 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  buildIconButton(Icons.favorite, '인기도서', () {
-                    // 수정 아이콘 클릭 시 실행될 코드 작성
-                  }),
-                  buildIconButton(Icons.fiber_new, '신간도서', () {
-                    // 삭제 아이콘 클릭 시 실행될 코드 작성
-                  }),
+                  buildIconButton(Icons.favorite, '인기도서', () {}),
+                  buildIconButton(Icons.fiber_new, '신간도서', () {}),
                 ],
               ),
             ],

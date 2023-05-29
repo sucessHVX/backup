@@ -68,6 +68,9 @@ class _SearchDetailPageState extends State<SearchDetailPage> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    onSubmitted: (value) {
+                      _performSearch(); // 검색 수행하는 함수 호출
+                    },
                   ),
                 ),
               ],
@@ -110,6 +113,9 @@ class _SearchDetailPageState extends State<SearchDetailPage> {
                       border: OutlineInputBorder(),
                       hintText: '카테고리를 입력해주세요',
                     ),
+                    onSubmitted: (value) {
+                      _performSearch(); // 검색 수행하는 함수 호출
+                    },
                   ),
                 ),
               ],
@@ -122,126 +128,137 @@ class _SearchDetailPageState extends State<SearchDetailPage> {
                   searchQuery = _searchController.text;
                   searchCategory = _categoryController.text;
                   int result = 0;
-                  if (_searchController.text == "" &&
+
+                  if (_selectedCategory == "제목" &&
                       _categoryController.text == "") {
-                    print("검색 결과가 없습니다");
-                  } else {
-                    if (_selectedCategory == "제목" &&
-                        _categoryController.text == "") {
-                      result = await b.title(_searchController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_selectedCategory == "저자" &&
-                        _categoryController.text == "") {
-                      result = await b.author(_searchController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_selectedCategory == "출판사" &&
-                        _categoryController.text == "") {
-                      result = await b.publisher(_searchController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_searchController.text == "") {
-                      result = await b.category(_categoryController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_selectedCategory == "제목") {
-                      result = await b.titleCategory(
-                          _searchController.text, _categoryController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_selectedCategory == "저자") {
-                      result = await b.authorCategory(
-                          _searchController.text, _categoryController.text);
-                      if (result == 1) {
-                      } else {}
-                    } else if (_selectedCategory == "출판사") {
-                      result = await b.publisherCategory(
-                          _searchController.text, _categoryController.text);
-                      if (result == 1) {
-                      } else {}
-                    }
+                    result = await b.title(_searchController.text);
+                  } else if (_selectedCategory == "저자" &&
+                      _categoryController.text == "") {
+                    result = await b.author(_searchController.text);
+                  } else if (_selectedCategory == "출판사" &&
+                      _categoryController.text == "") {
+                    result = await b.publisher(_searchController.text);
+                  } else if (_searchController.text == "") {
+                    result = await b.category(_categoryController.text);
+                  } else if (_selectedCategory == "제목") {
+                    result = await b.titleCategory(
+                        _searchController.text, _categoryController.text);
+                  } else if (_selectedCategory == "저자") {
+                    result = await b.authorCategory(
+                        _searchController.text, _categoryController.text);
+                  } else if (_selectedCategory == "출판사") {
+                    result = await b.publisherCategory(
+                        _searchController.text, _categoryController.text);
                   }
                 }),
             const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: b.books.isEmpty
-                    ? const Center(
-                        child: Text(
-                          '검색 결과가 없습니다.',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount:
-                            b.books.length * 2 - 1, // 구분선을 위해 아이템 수에 구분선 수를 추가
-                        itemBuilder: (context, index) {
-                          // 구분선을 위한 인덱스 체크
-                          if (index.isOdd) {
-                            return const Divider(
-                              thickness: 5, // 구분선의 두께 설정
-                            );
-                          }
+            Obx(
+              () => Expanded(
+                child: SingleChildScrollView(
+                  child: b.books.isEmpty
+                      ? const Center(
+                          child: Text(
+                            '검색 결과가 없습니다.',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: b.books.length * 2 -
+                              1, // 구분선을 위해 아이템 수에 구분선 수를 추가
+                          itemBuilder: (context, index) {
+                            // 구분선을 위한 인덱스 체크
+                            if (index.isOdd) {
+                              return const Divider(
+                                thickness: 5, // 구분선의 두께 설정
+                              );
+                            }
 
-                          // 실제 아이템 인덱스 계산
-                          final itemIndex = index ~/ 2;
+                            // 실제 아이템 인덱스 계산
+                            final itemIndex = index ~/ 2;
 
-                          return GestureDetector(
-                            onTap: () async {
-                              await Get.to(() => BookDetailPage(itemIndex));
-                            },
-                            child: Row(
-                              children: [
-                                Hero(
-                                  tag: itemIndex,
-                                  child: Container(
-                                    width: 150,
-                                    height: 200,
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 15,
-                                          offset: const Offset(10, 10),
-                                          color: Colors.black.withOpacity(0.3),
+                            return GestureDetector(
+                              onTap: () async {
+                                await Get.to(() => BookDetailPage(itemIndex));
+                              },
+                              child: Row(
+                                children: [
+                                  Hero(
+                                    tag: itemIndex,
+                                    child: Container(
+                                      width: 150,
+                                      height: 200,
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 15,
+                                            offset: const Offset(10, 10),
+                                            color:
+                                                Colors.black.withOpacity(0.3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Image.network(
+                                        b.books[itemIndex].imgUrl,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${b.books[itemIndex].title!} / ${b.books[itemIndex].author!} 지음",
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    child: Image.network(
-                                      b.books[itemIndex].imgUrl,
-                                      fit: BoxFit.cover,
-                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${b.books[itemIndex].title!} / ${b.books[itemIndex].author!} 지음",
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _performSearch() async {
+    setState(() {});
+    searchQuery = _searchController.text;
+    searchCategory = _categoryController.text;
+    int result = 0;
+
+    if (_selectedCategory == "제목" && _categoryController.text == "") {
+      result = await b.title(_searchController.text);
+    } else if (_selectedCategory == "저자" && _categoryController.text == "") {
+      result = await b.author(_searchController.text);
+    } else if (_selectedCategory == "출판사" && _categoryController.text == "") {
+      result = await b.publisher(_searchController.text);
+    } else if (_searchController.text == "") {
+      result = await b.category(_categoryController.text);
+    } else if (_selectedCategory == "제목") {
+      result = await b.titleCategory(
+          _searchController.text, _categoryController.text);
+    } else if (_selectedCategory == "저자") {
+      result = await b.authorCategory(
+          _searchController.text, _categoryController.text);
+    } else if (_selectedCategory == "출판사") {
+      result = await b.publisherCategory(
+          _searchController.text, _categoryController.text);
+    }
   }
 }
