@@ -103,8 +103,10 @@ class BookDetailPage extends StatelessWidget {
                       height: buttonHeight,
                       child: CustomElevatedButton(
                         text: "안내",
-                        funPageRoute: () {
+                        funPageRoute: () async {
                           reLoad(context, "길안내 중입니다...");
+                          await Future.delayed(const Duration(seconds: 4));
+                          Get.snackbar("도착", "목적지에 도착했습니다");
                         },
                       ),
                     ),
@@ -199,6 +201,9 @@ Future<dynamic> reLoad(BuildContext context, String ex) async {
 
   if (ex == "바코드를 찍어주세요...") {
     await Future.delayed(const Duration(seconds: 2));
+    Navigator.pop(context);
+  } else {
+    await Future.delayed(const Duration(seconds: 4));
     Navigator.pop(context);
   }
 }
